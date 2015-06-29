@@ -16,11 +16,13 @@
   ],
   "dependencies": {
     "angular": "~1.4.1",
+    "angular-resource": "~1.4.1",
     "angular-animate": "~1.4.1",
     "angular-sanitize": "~1.4.1",
     "angular-ui-select2": "~0.0.5",
     "angular-translate": "~2.7.2",
     "angular-cookies": "~1.4.1",
+    "angular-route": "~1.4.1",
     "momentjs": "~2.10.3",
     "underscore": "~1.8.3"
   }
