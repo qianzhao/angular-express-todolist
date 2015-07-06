@@ -5,32 +5,34 @@
 
 var express = require('express'),
   routes = require('./routes'),
-  api = require('./routes/api');
+  api = require('./routes/api'),
+  mongoose = require('mongoose'),
+  bodyParser = require('body-parser'),
+  logger = require('morgan'),
+  cookieParser = require('cookie-parser');
 
-var app = module.exports = express.createServer();
+mongoose.connect('mongodb://localhost:27017/todoApp', function(err) {
+  if(err) {
+    console.log('connection error', err);
+  } else {
+    console.log('connection successful');
+  }
+});
+
+var app = express();
 
 // Configuration
-
-app.configure(function(){
   app.set('views', __dirname + '/app/views');
   app.set('view engine', 'jade');
   app.set('view options', {
     layout: false
   });
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
+  app.use(logger('dev'));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(cookieParser());
   app.use(express.static(__dirname + '/app'));
-  app.use(app.router);
-});
 
-
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-app.configure('production', function(){
-  app.use(express.errorHandler());
-});
 
 // Routes
 
@@ -51,6 +53,8 @@ app.get('*', routes.index);
 
 // Start server
 
-app.listen(9000, function(){
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+var server = app.listen(9000, function(){
+  console.log("Express server listening on port %d in %s mode", server.address().port);
 });
+
+module.exports = app;
